@@ -6,7 +6,4 @@ const numbool1 = 1 < 2;
 console.log(numbool1);
 const one = 1;
 const two = 2;
-const numbool2 = one == two;
-console.log(numbool2);
 const str_two = '2';
-const numbool3 = two == str_two;
