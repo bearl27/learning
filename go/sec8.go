@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"os"
 	"strconv"
+	"time"
 )
 
 func sec8() {
@@ -22,6 +23,9 @@ func sec8() {
 	f_defar()
 	println("--panic--")
 	f_panic()
+	println("--goroutine--")
+	f_goroutine()
+
 }
 
 func f_if() {
@@ -250,4 +254,29 @@ func f_panic() {
 	}()
 	panic("runtime error")
 	fmt.Println("end") // non disp
+}
+
+func f_goroutine() {
+	go sub()
+	go sub()
+
+	i := 0
+	for {
+		i++
+		fmt.Println("main loop", i)
+		time.Sleep(1 * time.Second)
+	}
+}
+
+func sub() {
+	i := 0
+
+	for {
+		i++
+		fmt.Println("sub loop", i)
+		time.Sleep(1 * time.Second)
+	}
+}
+func init() {
+	fmt.Println("init")
 }
