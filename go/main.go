@@ -16,7 +16,8 @@ func main() {
 	//func_string()
 	// func_interface()
 	//func_const()
-	sec7()
+	//sec7()
+	sec8()
 }
 
 func func_var() {
