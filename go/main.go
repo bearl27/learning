@@ -15,7 +15,8 @@ func main() {
 	//func_float()
 	//func_string()
 	// func_interface()
-	func_const()
+	//func_const()
+	sec7()
 }
 
 func func_var() {
