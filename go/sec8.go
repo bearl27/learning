@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"os"
 	"strconv"
 )
 
@@ -15,6 +16,12 @@ func sec8() {
 	f_switch()
 	println("--interface--")
 	f_interface()
+	println("--label for--")
+	f_label_for()
+	println("--defar--")
+	f_defar()
+	println("--panic--")
+	f_panic()
 }
 
 func f_if() {
@@ -178,4 +185,69 @@ func anything(a interface{}) {
 	default:
 		fmt.Println(v)
 	}
+
+	// switch a.(type) {
+	// 	case string:
+	// 		fmt.Println(a + "!")
+	// 	case int:
+	// 		fmt.Println(a + 1000)
+	// 	default:
+	// 		fmt.Println(a)
+	// }
+}
+
+func f_label_for() {
+Loop:
+	for {
+		for {
+			for {
+				fmt.Println("loop")
+				break Loop
+			}
+		}
+	}
+	fmt.Println("end")
+
+Loop2:
+	for i := 0; i < 5; i++ {
+		for j := 0; j < 5; j++ {
+			if j > 2 {
+				continue Loop2
+			}
+			fmt.Print(j)
+		}
+		fmt.Println("aaa")
+	}
+	fmt.Println("end")
+
+}
+
+func f_defar() {
+	defer fmt.Println("Start")
+	defer fmt.Println("Middle")
+	defer fmt.Println("End")
+	fmt.Println("test")
+
+	defer func() {
+		fmt.Println(1)
+		fmt.Println(2)
+	}()
+
+	file, err := os.Create("test.txt")
+	if err != nil {
+		fmt.Println(err)
+	}
+	defer file.Close()
+	file.Write([]byte("test"))
+}
+
+// panic recover
+func f_panic() {
+	defer func() {
+		if x := recover(); x != nil {
+			fmt.Println(x)
+		}
+	}()
+	panic("runtime error")
+	fmt.Println("end") // non disp
 }
