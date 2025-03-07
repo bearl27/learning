@@ -1,6 +1,9 @@
 package main
 
-import "fmt"
+import (
+	"fmt"
+	"time"
+)
 
 func sec9() {
 	fmt.Println("sec9")
@@ -8,6 +11,10 @@ func sec9() {
 	f_slice()
 	fmt.Println("--map--")
 	f_map()
+	fmt.Println("--channel--")
+	f_channel()
+	// fmt.Println("--channel_go--")
+	// f_channel_go()
 }
 
 func f_slice() {
@@ -105,4 +112,84 @@ func f_map() {
 	fmt.Println(len(m2))
 	m3 := make(map[int]string)
 	fmt.Println(m3)
+}
+
+func f_channel() {
+	var ch1 chan int
+	//　受信専用
+	// var ch2 <-chan int
+	// 送信専用
+	// var ch3 chan<- int
+
+	ch1 = make(chan int)
+	ch2 := make(chan int)
+
+	fmt.Println(cap(ch1))
+	fmt.Println(cap(ch2))
+
+	ch3 := make(chan int, 3)
+	fmt.Println(cap(ch3)) // 3
+	ch3 <- 1
+	ch3 <- 2
+	ch3 <- 3
+	fmt.Println(len(ch3)) //3
+	i := <-ch3
+	fmt.Println("value", i, "len", len(ch3))
+	fmt.Println("value", <-ch3, "len", len(ch3))
+	ch3 <- 4
+	ch3 <- 5
+	// ch3 <- 6
+	fmt.Println("value", <-ch3, "len", len(ch3))
+
+	close(ch3)
+	//ch3 <- 6 // panic
+	i, ok := <-ch3
+	fmt.Println(i, ok)
+
+	ch4 := make(chan int, 2)
+	close(ch4)
+	i, ok = <-ch4
+	fmt.Println(i, ok)
+
+	ch5 := make(chan int, 2)
+	ch6 := make(chan int, 2)
+
+	ch6 <- 1
+
+	// fmt.Println(<-ch5)
+	// fmt.Println(<-ch6)
+
+	select {
+	case v1 := <-ch5:
+		fmt.Println(v1)
+	case v2 := <-ch6:
+		fmt.Println(v2)
+	default:
+		fmt.Println("default")
+	}
+
+}
+
+func f_channel_go() {
+	ch_go1 := make(chan int)
+	ch_go2 := make(chan int)
+
+	//go reciever(ch_go1)
+	//go reciever(ch_go2)
+
+	i := 0
+	for i < 10 {
+		ch_go1 <- i
+		ch_go2 <- i
+		time.Sleep(50 * time.Millisecond)
+		i++
+	}
+
+}
+
+func reciever(c chan int) {
+	for {
+		i := <-c
+		fmt.Println(i)
+	}
 }
