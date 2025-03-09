@@ -18,7 +18,8 @@ func main() {
 	//func_const()
 	//sec7()
 	//sec8()
-	sec9()
+	//sec9()
+	sec10()
 }
 
 func func_var() {
