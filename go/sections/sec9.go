@@ -1,11 +1,11 @@
-package main
+package sections
 
 import (
 	"fmt"
 	"time"
 )
 
-func sec9() {
+func Sec9() {
 	fmt.Println("sec9")
 	fmt.Println("--slice--")
 	f_slice()

@@ -1,4 +1,4 @@
-package main
+package sections
 
 import "fmt"
 
@@ -25,7 +25,7 @@ func add(x int) {
 	x++
 }
 
-func sec7() {
+func Sec7() {
 	fmt.Println("sec7")
 	i := Plus(1, 2)
 	fmt.Println(i)

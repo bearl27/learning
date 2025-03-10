@@ -1,4 +1,4 @@
-package main
+package sections
 
 import "fmt"
 
@@ -11,7 +11,7 @@ func (u *User) SetName(name string) {
 	u.Name = name
 }
 
-func sec11() {
+func Sec11() {
 	fmt.Println("sec11")
 	fmt.Println("--struct--")
 	f_struct()

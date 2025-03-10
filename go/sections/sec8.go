@@ -1,4 +1,4 @@
-package main
+package sections
 
 import (
 	"fmt"
@@ -7,7 +7,7 @@ import (
 	"time"
 )
 
-func sec8() {
+func Sec8() {
 	println("sec8")
 	println("--if--")
 	f_if()
