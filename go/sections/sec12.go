@@ -1,4 +1,4 @@
-package main
+package sections
 
 import "fmt"
 
@@ -25,7 +25,7 @@ func (c *Car) ToString() string {
 	return fmt.Sprintf("Name=%v, Age=%v", c.Number, c.Model)
 }
 
-func sec12() {
+func Sec12() {
 	vs := []Stringfy{
 		&Person{Name: "Bob", Age: 2},
 		&Car{Number: "123-456", Model: "Toyota"},

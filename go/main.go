@@ -1,6 +1,9 @@
 package main
 
-import "fmt"
+import (
+	"fmt"
+	"main/foo"
+)
 
 // HelloWorld
 // func main() {
@@ -16,12 +19,13 @@ func main() {
 	//func_string()
 	// func_interface()
 	//func_const()
-	//sec7()
-	//sec8()
-	//sec9()
-	//sec10()
-	//sec11()
-	sec12()
+	//sections.Sec7()
+	//sections.Sec8()
+	//sections.Sec9()
+	//sections.Sec10()
+	//sections.Sec11()
+	//sections.Sec12()
+	fmt.Println(foo.Max)
 }
 
 func func_var() {

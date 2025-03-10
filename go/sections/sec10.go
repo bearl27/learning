@@ -1,4 +1,4 @@
-package main
+package sections
 
 import "fmt"
 
@@ -11,7 +11,7 @@ func DoublePointer(i *int) {
 }
 
 // pointa
-func sec10() {
+func Sec10() {
 	fmt.Println("--Pointa--")
 	n := 100
 	fmt.Println(n)
