@@ -2,9 +2,9 @@ package main
 
 import "fmt"
 
-func Double(i int) {
-	i = i * 2
-}
+// func Double(i int) {
+// 	i = i * 2
+// }
 
 func DoublePointer(i *int) {
 	*i = *i * 2
@@ -16,7 +16,7 @@ func sec10() {
 	n := 100
 	fmt.Println(n)
 	fmt.Println(&n) // address
-	Double(n)
+	//Double(n)
 	fmt.Println(n)
 	var p *int = &n
 	fmt.Println(p)
