@@ -20,7 +20,8 @@ func main() {
 	//sec8()
 	//sec9()
 	//sec10()
-	sec11()
+	//sec11()
+	sec12()
 }
 
 func func_var() {
