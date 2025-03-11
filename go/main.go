@@ -2,7 +2,7 @@ package main
 
 import (
 	"fmt"
-	"main/foo"
+	"main/sections"
 )
 
 // HelloWorld
@@ -25,7 +25,8 @@ func main() {
 	//sections.Sec10()
 	//sections.Sec11()
 	//sections.Sec12()
-	fmt.Println(foo.Max)
+	//fmt.Println(foo.Max)
+	sections.Sec16()
 }
 
 func func_var() {
