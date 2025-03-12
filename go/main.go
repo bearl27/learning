@@ -2,31 +2,30 @@ package main
 
 import (
 	"fmt"
-	"main/sections"
+
+	_ "github.com/lib/pq"
+	"gopkg.in/go-ini/ini.v1"
 )
 
-// HelloWorld
-// func main() {
-// 	fmt.Println("Hello World")
-// 	fmt.Println(time.Now())
-// }
+type ConfigList struct {
+	Port      int
+	DbName    string
+	SQLDriver string
+}
 
-// 変数
+var Config ConfigList
+
+func init() {
+	cfg, _ := ini.Load("config.ini")
+	Config = ConfigList{
+		Port:      cfg.Section("web").Key("port").MustInt(8080),
+		DbName:    cfg.Section("db").Key("name").MustString("example.sql"),
+		SQLDriver: cfg.Section("db").Key("driver").String(),
+	}
+}
+
 func main() {
-	//func_var()
-	//func_int()
-	//func_float()
-	//func_string()
-	// func_interface()
-	//func_const()
-	//sections.Sec7()
-	//sections.Sec8()
-	//sections.Sec9()
-	//sections.Sec10()
-	//sections.Sec11()
-	//sections.Sec12()
-	//fmt.Println(foo.Max)
-	sections.Sec16()
+	fmt.Println(Config)
 }
 
 func func_var() {

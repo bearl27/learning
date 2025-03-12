@@ -277,6 +277,7 @@ func sub() {
 		time.Sleep(1 * time.Second)
 	}
 }
-func init() {
-	fmt.Println("init")
-}
+
+// func init() {
+// 	fmt.Println("init")
+// }
