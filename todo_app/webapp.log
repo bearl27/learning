@@ -1,0 +1,5 @@
+2025/03/14 12:57:39 users.go:124: sql: no rows in result set
+2025/03/14 12:58:16 users.go:124: sql: no rows in result set
+2025/03/14 13:02:10 users.go:124: sql: no rows in result set
+2025/03/14 13:22:07 server.go:3634: http: superfluous response.WriteHeader call from todo_app/app/controllers.authenticate (route_auth.go:78)
+2025/03/14 13:22:13 server.go:3634: http: superfluous response.WriteHeader call from todo_app/app/controllers.authenticate (route_auth.go:78)
