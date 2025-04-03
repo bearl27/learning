@@ -4,9 +4,11 @@ import (
 	"context"
 	"fmt"
 	"grpc/pb"
+	"io"
 	"log"
 	"net"
 	"os"
+	"time"
 
 	"google.golang.org/grpc"
 )
@@ -14,6 +16,12 @@ import (
 type server struct {
 	pb.UnimplementedFileServiceServer
 }
+
+// type FileServiceServer interface {
+// 	ListFiles(context.Context, *ListFilesRequest) (*ListFilesResponse, error)
+// 	Download(*DownloadRequest, grpc.ServerStreamingServer[DownloadResponse]) error
+// 	mustEmbedUnimplementedFileServiceServer()
+// }
 
 func (*server) ListFiles(ctx context.Context, req *pb.ListFilesRequest) (*pb.ListFilesResponse, error) {
 	fmt.Println("ListFiles was invoked")
@@ -37,6 +45,38 @@ func (*server) ListFiles(ctx context.Context, req *pb.ListFilesRequest) (*pb.Lis
 	}
 
 	return res, nil
+}
+
+func (*server) Download(req *pb.DownloadRequest, stream pb.FileService_DownloadServer) error {
+	fmt.Println("Download was invoked")
+
+	filename := req.GetFilename()
+	path := "/Users/Nagahari.Kai/Github/learning/grpc-lesson/storage/" + filename
+
+	file, err := os.Open(path)
+	if err != nil {
+		return err
+	}
+	defer file.Close()
+
+	buf := make([]byte, 5)
+	for {
+		n, err := file.Read(buf)
+		if err == io.EOF {
+			break
+		}
+		if err != nil {
+			return err
+		}
+
+		res := &pb.DownloadResponse{Data: buf[:n]}
+		sendErr := stream.Send(res)
+		if sendErr != nil {
+			return sendErr
+		}
+		time.Sleep(1 * time.Second)
+	}
+	return nil
 }
 
 func main() {
