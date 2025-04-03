@@ -1,0 +1,38 @@
+syntax = "proto3";
+
+
+package employee;
+option go_package = "./pb";
+
+import "proto/date.proto";
+
+message Employee {
+    int32 id = 1;
+    string name = 2;
+    string email = 3;
+    Occupation occupation = 4;
+    repeated string phone_number = 5;
+    map<string, Company.Project> project = 6;
+    oneof profile {
+        string text = 7;
+        Video video = 8;
+    }
+    date.Date birthday = 9;
+}
+
+
+enum Occupation {
+    OCCUPATION_UNKNOWN = 0;
+    ENGINNER = 1;
+    DESIGNER = 2;
+}
+
+message Company {
+    message Project {}
+}
+
+message Project {
+}
+
+
+message Video {}
