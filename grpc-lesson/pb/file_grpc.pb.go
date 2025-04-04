@@ -19,8 +19,10 @@ import (
 const _ = grpc.SupportPackageIsVersion9
 
 const (
-	FileService_ListFiles_FullMethodName = "/file.FileService/ListFiles"
-	FileService_Download_FullMethodName  = "/file.FileService/Download"
+	FileService_ListFiles_FullMethodName               = "/file.FileService/ListFiles"
+	FileService_Download_FullMethodName                = "/file.FileService/Download"
+	FileService_Upload_FullMethodName                  = "/file.FileService/Upload"
+	FileService_UploadAndNotifyProgress_FullMethodName = "/file.FileService/UploadAndNotifyProgress"
 )
 
 // FileServiceClient is the client API for FileService service.
@@ -29,6 +31,8 @@ const (
 type FileServiceClient interface {
 	ListFiles(ctx context.Context, in *ListFilesRequest, opts ...grpc.CallOption) (*ListFilesResponse, error)
 	Download(ctx context.Context, in *DownloadRequest, opts ...grpc.CallOption) (grpc.ServerStreamingClient[DownloadResponse], error)
+	Upload(ctx context.Context, opts ...grpc.CallOption) (grpc.ClientStreamingClient[UploadRequest, UploadResponse], error)
+	UploadAndNotifyProgress(ctx context.Context, opts ...grpc.CallOption) (grpc.BidiStreamingClient[UploadAndNotifyProgressRequest, UploadAndNotifyProgressResponse], error)
 }
 
 type fileServiceClient struct {
@@ -68,12 +72,40 @@ func (c *fileServiceClient) Download(ctx context.Context, in *DownloadRequest, o
 // This type alias is provided for backwards compatibility with existing code that references the prior non-generic stream type by name.
 type FileService_DownloadClient = grpc.ServerStreamingClient[DownloadResponse]
 
+func (c *fileServiceClient) Upload(ctx context.Context, opts ...grpc.CallOption) (grpc.ClientStreamingClient[UploadRequest, UploadResponse], error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	stream, err := c.cc.NewStream(ctx, &FileService_ServiceDesc.Streams[1], FileService_Upload_FullMethodName, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	x := &grpc.GenericClientStream[UploadRequest, UploadResponse]{ClientStream: stream}
+	return x, nil
+}
+
+// This type alias is provided for backwards compatibility with existing code that references the prior non-generic stream type by name.
+type FileService_UploadClient = grpc.ClientStreamingClient[UploadRequest, UploadResponse]
+
+func (c *fileServiceClient) UploadAndNotifyProgress(ctx context.Context, opts ...grpc.CallOption) (grpc.BidiStreamingClient[UploadAndNotifyProgressRequest, UploadAndNotifyProgressResponse], error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	stream, err := c.cc.NewStream(ctx, &FileService_ServiceDesc.Streams[2], FileService_UploadAndNotifyProgress_FullMethodName, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	x := &grpc.GenericClientStream[UploadAndNotifyProgressRequest, UploadAndNotifyProgressResponse]{ClientStream: stream}
+	return x, nil
+}
+
+// This type alias is provided for backwards compatibility with existing code that references the prior non-generic stream type by name.
+type FileService_UploadAndNotifyProgressClient = grpc.BidiStreamingClient[UploadAndNotifyProgressRequest, UploadAndNotifyProgressResponse]
+
 // FileServiceServer is the server API for FileService service.
 // All implementations must embed UnimplementedFileServiceServer
 // for forward compatibility.
 type FileServiceServer interface {
 	ListFiles(context.Context, *ListFilesRequest) (*ListFilesResponse, error)
 	Download(*DownloadRequest, grpc.ServerStreamingServer[DownloadResponse]) error
+	Upload(grpc.ClientStreamingServer[UploadRequest, UploadResponse]) error
+	UploadAndNotifyProgress(grpc.BidiStreamingServer[UploadAndNotifyProgressRequest, UploadAndNotifyProgressResponse]) error
 	mustEmbedUnimplementedFileServiceServer()
 }
 
@@ -89,6 +121,12 @@ func (UnimplementedFileServiceServer) ListFiles(context.Context, *ListFilesReque
 }
 func (UnimplementedFileServiceServer) Download(*DownloadRequest, grpc.ServerStreamingServer[DownloadResponse]) error {
 	return status.Errorf(codes.Unimplemented, "method Download not implemented")
+}
+func (UnimplementedFileServiceServer) Upload(grpc.ClientStreamingServer[UploadRequest, UploadResponse]) error {
+	return status.Errorf(codes.Unimplemented, "method Upload not implemented")
+}
+func (UnimplementedFileServiceServer) UploadAndNotifyProgress(grpc.BidiStreamingServer[UploadAndNotifyProgressRequest, UploadAndNotifyProgressResponse]) error {
+	return status.Errorf(codes.Unimplemented, "method UploadAndNotifyProgress not implemented")
 }
 func (UnimplementedFileServiceServer) mustEmbedUnimplementedFileServiceServer() {}
 func (UnimplementedFileServiceServer) testEmbeddedByValue()                     {}
@@ -140,6 +178,20 @@ func _FileService_Download_Handler(srv interface{}, stream grpc.ServerStream) er
 // This type alias is provided for backwards compatibility with existing code that references the prior non-generic stream type by name.
 type FileService_DownloadServer = grpc.ServerStreamingServer[DownloadResponse]
 
+func _FileService_Upload_Handler(srv interface{}, stream grpc.ServerStream) error {
+	return srv.(FileServiceServer).Upload(&grpc.GenericServerStream[UploadRequest, UploadResponse]{ServerStream: stream})
+}
+
+// This type alias is provided for backwards compatibility with existing code that references the prior non-generic stream type by name.
+type FileService_UploadServer = grpc.ClientStreamingServer[UploadRequest, UploadResponse]
+
+func _FileService_UploadAndNotifyProgress_Handler(srv interface{}, stream grpc.ServerStream) error {
+	return srv.(FileServiceServer).UploadAndNotifyProgress(&grpc.GenericServerStream[UploadAndNotifyProgressRequest, UploadAndNotifyProgressResponse]{ServerStream: stream})
+}
+
+// This type alias is provided for backwards compatibility with existing code that references the prior non-generic stream type by name.
+type FileService_UploadAndNotifyProgressServer = grpc.BidiStreamingServer[UploadAndNotifyProgressRequest, UploadAndNotifyProgressResponse]
+
 // FileService_ServiceDesc is the grpc.ServiceDesc for FileService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -157,6 +209,17 @@ var FileService_ServiceDesc = grpc.ServiceDesc{
 			StreamName:    "Download",
 			Handler:       _FileService_Download_Handler,
 			ServerStreams: true,
+		},
+		{
+			StreamName:    "Upload",
+			Handler:       _FileService_Upload_Handler,
+			ClientStreams: true,
+		},
+		{
+			StreamName:    "UploadAndNotifyProgress",
+			Handler:       _FileService_UploadAndNotifyProgress_Handler,
+			ServerStreams: true,
+			ClientStreams: true,
 		},
 	},
 	Metadata: "proto/file.proto",
