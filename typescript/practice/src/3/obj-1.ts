@@ -4,8 +4,8 @@ const obj = {
 };
 console.log(obj.name);
 console.log(obj.age);
-console.log(obj["name"]);
-console.log(obj["age"]);
+// console.log(obj["name"]);
+// console.log(obj["age"]);
 
 // const name = input ? input.name : "default";
 // const user = {

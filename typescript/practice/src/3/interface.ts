@@ -6,5 +6,5 @@ interface Person {
 //     name: "hoge",
 //     age: 20,
 // }
-// console.log(obj.name);
+console.log(obj.name);
 
